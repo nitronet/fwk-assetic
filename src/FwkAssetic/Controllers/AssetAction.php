@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Fwk\Core\Context;
 use Assetic\Asset\AssetCache;
 use Assetic\Cache\FilesystemCache;
+use Assetic\Asset\AssetInterface;
 
 class AssetAction implements ServicesAware, ContextAware
 {
@@ -18,13 +19,9 @@ class AssetAction implements ServicesAware, ContextAware
     
     public function show()
     {
-        $assetic    = $this->getServices()->get('assetic.AssetFactory');
+        $assetic    = $this->getServices()->get('assetic');
         $response   = new Response();
         $response->setExpires(new \DateTime());
-        if (!$assetic instanceof \Assetic\Factory\AssetFactory) {
-            $response->setStatusCode(500);
-            return $response;
-        }
         
         if (empty($this->asset) || strpos($this->asset, '/') === false) {
             $response->setStatusCode(400);
@@ -40,10 +37,10 @@ class AssetAction implements ServicesAware, ContextAware
         }
         
         $formula     = $assetic->getAssetManager()->getFormula($formulaName);
-        if ($formula[0] instanceof \Assetic\Asset\AssetInterface) {
+        if ($formula[0] instanceof AssetInterface) {
             $asset   = $formula[0];
         } else {
-            $asset   = $assetic->createAsset($formula[0], $formula[1], $formula[2]);
+            $asset   = $assetic->getFactory()->createAsset($formula[0], $formula[1], $formula[2]);
         } 
         
         if (null !== $lastModified = $asset->getLastModified()) {
@@ -53,7 +50,7 @@ class AssetAction implements ServicesAware, ContextAware
         }
 
         $formula['last_modified'] = $lastModified;
-        $response->setETag(md5(serialize($formula)));
+        $response->setETag(md5($asset->getContent()));
         
         $this->defineContentType($response);
         
@@ -74,14 +71,14 @@ class AssetAction implements ServicesAware, ContextAware
      */
     protected function cacheAsset(AssetInterface $asset)
     {
-        $services   = $this->getServices();
-        $useCache   = false; /* TODO */
+        $assetic    = $this->getServices()->get('assetic');
+        $useCache   = $assetic->hasCache();
         
         if (!$useCache) {
             return $asset;
         }
         
-        $dir        = $services->getProperty('assetic.cache.directory');
+        $dir = $this->getServices()->getProperty('assetic.cache.directory', sys_get_temp_dir());
         return new AssetCache(
             $asset, 
             new FilesystemCache($dir)
