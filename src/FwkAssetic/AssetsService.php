@@ -28,6 +28,12 @@ class AssetsService
     protected $cache;
     
     /**
+     * Shortcuts to Assets paths
+     * @var array
+     */
+    protected $shortcuts = array();
+    
+    /**
      * Constructor
      * 
      * @param AssetFactory   $factory The AssetFactory 
@@ -42,6 +48,7 @@ class AssetsService
         $this->factory  = $factory;
         $this->manager  = $manager;
         $this->cache    = $cache;
+        $this->factory->setAssetManager($this->getAssetManager());
     }
     
     /**
@@ -155,5 +162,44 @@ class AssetsService
     public function hasCache()
     {
         return ($this->cache instanceof CacheInterface);
+    }
+    
+    public function addShortcut($name, $target)
+    {
+        $this->shortcuts[$name] = $target;
+        
+        return $this;
+    }
+    
+    public function removeShortcut($name)
+    {
+        unset($this->shortcuts[$name]);
+        
+        return $this;
+    }
+    
+    public function addShortcuts(array $shortcuts)
+    {
+        $this->shortcuts = array_merge($shortcuts, $this->shortcuts);
+        
+        return $this;
+    }
+    
+    public function applyShortcuts(array $assets)
+    {
+        $replaces = array();
+        array_walk($this->shortcuts, function ($target, $name) use (&$replaces) { 
+            $replaces['+'. $name] = $target;
+        });
+        
+        foreach($assets as $idx => $asset) {
+            $assets[$idx] = str_replace(
+                array_keys($replaces), 
+                array_values($replaces), 
+                $asset
+            );
+        }
+        
+        return $assets;
     }
 }

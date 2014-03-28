@@ -45,7 +45,7 @@ class AssetViewHelper extends AbstractViewHelper
         $factory    = $this->getAssetsService()->getFactory();
         $output     = 'images/*';
         
-        // $scripts    = $service->applyAppsDirectories($scripts);
+        $scripts    = $this->getAssetsService()->applyShortcuts($scripts);
         
         $first = $scripts[0];
         if (strpos($first, '.js', strlen($first)-3)) {

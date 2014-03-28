@@ -199,6 +199,44 @@ And reconfigure previous definitions:
 Now you can refresh your pages and admire your frontend skills ;)
 
 
+## Shortcuts to Assets
+
+Sometimes it can be useful to define shortcuts to assets directories if they are not in your ```:assetic.assets.directory```. 
+
+### 1: Create an array of shortcuts
+
+``` xml
+<!-- Assets shortcuts -->
+<array-definition name="assetic.Shortcuts">
+    <param key="bower">:packageDir/../public/bower_components</param>
+    <param key="theme">:packageDir/templates/assets</param>
+</array-definition>
+```
+
+### 2: Add a method call to your AssetsService
+
+``` xml
+<!-- Assets Service -->
+<class-definition name="assetic" class="FwkAssetic\AssetsService" shared="true">
+    <argument>@assetic.AssetFactory</argument>
+    <argument>@assetic.FilesystemCache</argument>
+    <!-- add shortcuts -->
+    <call method="addShortcuts">
+        <argument>@assetic.Shortcuts</argument>
+    </call>
+</class-definition>
+```
+
+### 3: Use your shortcuts
+
+Now that shortcuts have been defined, we can call our assets easily:
+
+``` php
+<?php foreach($this->_helper->asset(array('+bower/bootstrap/css/bootstrap.css')) as $asset): ?>
+    <link href="<?php echo $asset; ?>" media="all" rel="stylesheet" type="text/css" />
+<?php endforeach; ?>
+```
+
 ## Full XML configuration
 
 ``` xml
@@ -232,9 +270,14 @@ Now you can refresh your pages and admire your frontend skills ;)
     </call>
 </class-definition>
 
+<!-- Assets Service -->
 <class-definition name="assetic" class="FwkAssetic\AssetsService" shared="true">
     <argument>@assetic.AssetFactory</argument>
     <argument>@assetic.FilesystemCache</argument>
+    <!-- add shortcuts -->
+    <call method="addShortcuts">
+        <argument>@assetic.Shortcuts</argument>
+    </call>
 </class-definition>
 
 <class-definition name="_vh.AsseticViewHelper" class="\FwkAssetic\AssetViewHelper" shared="true">
@@ -243,6 +286,12 @@ Now you can refresh your pages and admire your frontend skills ;)
     <argument>:assetic.debug</argument>
     <argument>:assetic.action.name</argument>
 </class-definition>
+
+<!-- Assets shortcuts -->
+<array-definition name="assetic.Shortcuts">
+    <param key="bower">:packageDir/../public/bower_components</param>
+    <param key="theme">:packageDir/templates/assets</param>
+</array-definition>
 ```
 
 ## Contributions / Community
