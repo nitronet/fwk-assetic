@@ -180,7 +180,7 @@ class AssetsService
     
     public function addShortcuts(array $shortcuts)
     {
-        $this->shortcuts = array_merge($shortcuts, $this->shortcuts);
+        $this->shortcuts = array_merge($this->shortcuts, $shortcuts);
         
         return $this;
     }
