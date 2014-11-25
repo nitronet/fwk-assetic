@@ -31,6 +31,8 @@ class AsseticPlugin implements Plugin
             'helperName'    => 'asset',
             'serviceName'   => 'assetic'
         ), $config);
+
+        $this->shortcuts = $shortcuts;
     }
 
     public function loadServices(Container $container)
