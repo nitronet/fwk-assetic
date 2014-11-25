@@ -28,7 +28,8 @@ class AsseticPlugin implements Plugin
             'cacheDir'      => null,
             'cacheStrategy' => 'content',
             'cssrewrite'    => true,
-            'helperName'    => 'asset'
+            'helperName'    => 'asset',
+            'serviceName'   => 'assetic'
         ), $config);
     }
 
@@ -36,7 +37,7 @@ class AsseticPlugin implements Plugin
     {
         // the ViewHelper
         $defViewHelper = new ClassDefinition('Nitronet\Fwk\Assetic\AssetViewHelper', array(
-            $this->cfg('helperName', 'asset'),
+            $this->cfg('serviceName', 'assetic'),
             'url',
             $this->cfg('debug', false),
             $this->cfg('action')
@@ -72,7 +73,7 @@ class AsseticPlugin implements Plugin
         ));
 
         $defService->addMethodCall('addShortcuts', array($this->shortcuts));
-        $container->set('assetic', $defService, true);
+        $container->set($this->cfg('serviceName', 'assetic'), $defService, true);
 
         // caching
         if ($this->cfg('cache', false) === true) {
