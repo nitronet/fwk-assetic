@@ -1,10 +1,10 @@
 <?php
-namespace FwkAssetic\Filters;
+namespace Nitronet\Fwk\Assetic\Filters;
 
 use Assetic\Filter\BaseCssFilter;
 use Assetic\Asset\AssetInterface;
 use Assetic\Filter\HashableInterface;
-use FwkAssetic\AssetViewHelper;
+use Nitronet\Fwk\Assetic\AssetViewHelper;
 
 class CssRewriteFilter extends BaseCssFilter 
     implements HashableInterface

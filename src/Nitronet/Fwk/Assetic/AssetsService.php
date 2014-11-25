@@ -1,5 +1,5 @@
 <?php
-namespace FwkAssetic;
+namespace Nitronet\Fwk\Assetic;
 
 use Assetic\Factory\AssetFactory;
 use Assetic\Cache\CacheInterface;

@@ -1,5 +1,5 @@
 <?php
-namespace FwkAssetic\Controllers;
+namespace Nitronet\Fwk\Assetic\Controllers;
 
 use Fwk\Core\ServicesAware;
 use Fwk\Core\ContextAware;

@@ -1,10 +1,8 @@
 <?php
-namespace FwkAssetic;
+namespace Nitronet\Fwk\Assetic;
 
 use Fwk\Core\Components\ViewHelper\AbstractViewHelper;
 use Fwk\Core\Components\ViewHelper\ViewHelper;
-use Fwk\Di\Container;
-use FwkAssetic\AssetsService;
 use Assetic\Factory\LazyAssetManager as LazyAssetManagerBase;
 
 class AssetViewHelper extends AbstractViewHelper 
