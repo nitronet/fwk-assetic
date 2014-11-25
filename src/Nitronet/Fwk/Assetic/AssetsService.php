@@ -4,8 +4,8 @@ namespace Nitronet\Fwk\Assetic;
 use Assetic\Factory\AssetFactory;
 use Assetic\Cache\CacheInterface;
 use Assetic\AssetManager;
-use FwkAssetic\Cache\CacheFormulaLoader;
-use FwkAssetic\Cache\LazyAssetManager;
+use Nitronet\Fwk\Assetic\Cache\CacheFormulaLoader;
+use Nitronet\Fwk\Assetic\Cache\LazyAssetManager;
 
 class AssetsService
 {
