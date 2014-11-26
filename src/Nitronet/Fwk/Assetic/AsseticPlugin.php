@@ -25,7 +25,7 @@ class AsseticPlugin implements Plugin
             'controller'    => 'Nitronet\Fwk\Assetic\Controllers\AssetAction:show',
             'debug'         => false,
             'cache'         => false,
-            'cacheDir'      => null,
+            'cacheDir'      => sys_get_temp_dir(),
             'cacheStrategy' => 'content',
             'cssrewrite'    => true,
             'helperName'    => 'asset',
@@ -71,7 +71,7 @@ class AsseticPlugin implements Plugin
 
         // service
         $defService = new ClassDefinition('Nitronet\Fwk\Assetic\AssetsService', array(
-            '@assetic.AssetFactory'
+            '@assetic.AssetFactory',
         ));
 
         $defService->addMethodCall('addShortcuts', array($this->shortcuts));
@@ -80,7 +80,7 @@ class AsseticPlugin implements Plugin
         // caching
         if ($this->cfg('cache', false) === true) {
             $defFilesystemCache = new ClassDefinition('Assetic\Cache\FilesystemCache', array(
-                $this->cfg('cacheDir', null)
+                $this->cfg('cacheDir', sys_get_temp_dir())
             ));
             $container->set('assetic.FilesystemCache', $defFilesystemCache, true);
 
@@ -91,7 +91,10 @@ class AsseticPlugin implements Plugin
 
             $defAssetFactory->addMethodCall('addWorker', array('@assetic.CacheBustingWorker'));
             $defService->addArgument('@assetic.FilesystemCache');
+            $defService->addArgument($this->cfg('cacheDir', sys_get_temp_dir()));
         }
+
+        $container->setProperty('asseticServiceName', $this->cfg('serviceName', 'assetic'));
     }
 
     public function load(Application $app)

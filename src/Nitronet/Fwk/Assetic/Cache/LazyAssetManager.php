@@ -19,7 +19,6 @@ class LazyAssetManager extends LazyAssetManagerBase
     ) {
         parent::__construct($factory, $loaders);
         
-        $factory->setAssetManager($this);
         $this->cache = $cache;
         $this->addResource(new CacheResource('assetic'), 'cache');
     }

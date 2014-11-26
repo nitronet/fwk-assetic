@@ -19,7 +19,7 @@ class AssetAction implements ServicesAware, ContextAware
     
     public function show()
     {
-        $assetic    = $this->getServices()->get('assetic');
+        $assetic    = $this->getServices()->get($this->getServices()->getProperty('asseticServiceName', 'assetic'));
         $response   = new Response();
         $response->setExpires(new \DateTime());
         
@@ -71,14 +71,14 @@ class AssetAction implements ServicesAware, ContextAware
      */
     protected function cacheAsset(AssetInterface $asset)
     {
-        $assetic    = $this->getServices()->get('assetic');
+        $assetic    = $this->getServices()->get($this->getServices()->getProperty('asseticServiceName', 'assetic'));
         $useCache   = $assetic->hasCache();
         
         if (!$useCache) {
             return $asset;
         }
         
-        $dir = $this->getServices()->getProperty('assetic.cache.directory', sys_get_temp_dir());
+        $dir = $assetic->getCacheDirectory();
         return new AssetCache(
             $asset, 
             new FilesystemCache($dir)

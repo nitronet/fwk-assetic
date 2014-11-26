@@ -32,6 +32,8 @@ class AssetsService
      * @var array
      */
     protected $shortcuts = array();
+
+    protected $cacheDirectory = null;
     
     /**
      * Constructor
@@ -43,11 +45,12 @@ class AssetsService
      * @return void 
      */
     public function __construct(AssetFactory $factory = null, 
-       CacheInterface $cache = null, AssetManager $manager = null
+       CacheInterface $cache = null, $cacheDir = null, AssetManager $manager = null
     ) {
         $this->factory  = $factory;
         $this->manager  = $manager;
         $this->cache    = $cache;
+        $this->cacheDirectory = $cacheDir;
         $this->factory->setAssetManager($this->getAssetManager());
     }
     
@@ -105,7 +108,7 @@ class AssetsService
                 $this->getFactory(),
                 array(
                     'cache' => new CacheFormulaLoader(
-                        $this->cache, 
+                        $this->cache,
                         $this->getFactory()->getFilterManager()
                     )
                 ),
@@ -153,7 +156,24 @@ class AssetsService
         
         return $this;
     }
-    
+
+    /**
+     * @return string
+     */
+    public function getCacheDirectory()
+    {
+        return $this->cacheDirectory;
+    }
+
+    /**
+     * @param string $cacheDirectory
+     */
+    public function setCacheDirectory($cacheDirectory)
+    {
+        $this->cacheDirectory = $cacheDirectory;
+    }
+
+
     /**
      * Tells if the cache is enabled
      * 

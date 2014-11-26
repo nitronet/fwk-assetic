@@ -3,7 +3,7 @@ namespace Nitronet\Fwk\Assetic;
 
 use Fwk\Core\Components\ViewHelper\AbstractViewHelper;
 use Fwk\Core\Components\ViewHelper\ViewHelper;
-use Assetic\Factory\LazyAssetManager as LazyAssetManagerBase;
+use Assetic\Factory\LazyAssetManager;
 
 class AssetViewHelper extends AbstractViewHelper 
     implements ViewHelper
@@ -81,7 +81,7 @@ class AssetViewHelper extends AbstractViewHelper
                 array('asset' => $collection->getTargetPath())
             )));
             
-            if ($am instanceof LazyAssetManagerBase) {
+            if ($am instanceof LazyAssetManager) {
                 list(,$formulaName,) = explode('/', $collection->getTargetPath());
                 $am->setFormula(
                     $formulaName, 
@@ -95,7 +95,7 @@ class AssetViewHelper extends AbstractViewHelper
                     array('asset' => $leaf->getTargetPath())
                 )));
                 
-                if ($am instanceof LazyAssetManagerBase) {
+                if ($am instanceof LazyAssetManager) {
                     list(,$formulaName,) = explode('/', $leaf->getTargetPath());
                     $am->setFormula(
                         $formulaName, 
