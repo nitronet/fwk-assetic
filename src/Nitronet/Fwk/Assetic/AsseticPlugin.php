@@ -105,8 +105,8 @@ class AsseticPlugin implements Plugin
     public function onUrlRewriterLoaded(UrlRewriterLoadedEvent $event)
     {
         $event->getUrlRewriterService()->addRoute(
-            new Route($this->cfg('action', 'Asset'), '/asset/:name', array(
-                new RouteParameter('name', null, '.*', true)
+            new Route($this->cfg('action', 'Asset'), '/asset/:asset', array(
+                new RouteParameter('asset', null, '.*', true)
             )
         ));
     }
