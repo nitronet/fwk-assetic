@@ -92,7 +92,17 @@ class CssRewriteFilter extends BaseCssFilter
             if (!isset($final)) {
                 $final = $root . DIRECTORY_SEPARATOR . $url;
             }
-            
+
+            $dieze = null;
+            if (strpos($final, '?') !== false) {
+                list($final, $get) = explode('?', $final);
+            } else {
+                $get = null;
+                if (strpos($final, '#') !== false) {
+                    list($final, $dieze) = explode('#', $final);
+                }
+            }
+
             if (!is_file($final)) {
                 return $matches[0];
             }
@@ -104,7 +114,7 @@ class CssRewriteFilter extends BaseCssFilter
                 false
             ));
             
-            return str_replace($url, $src[0], $matches[0]);
+            return str_replace($url, $src[0] . (!empty($get) ? '?'. $get : null) . (!empty($dieze) ? '#'. $dieze : null), $matches[0]);
         });
 
         $asset->setContent($content);
